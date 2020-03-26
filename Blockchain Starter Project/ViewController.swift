@@ -50,6 +50,16 @@ import UIKit
     - IBActions
         * redMine adds 100BTC to firstAccount
         * blueMine adds 100BTC to secondAccount
+        * redSend checks to see if redAmount textField is
+          empty. If it is, an UIAlert is presented. If not,
+          the transaction and chainState function is called.
+          Then, the redAmount textField is cleared. All
+          transactions are the printed.
+        * blueSend checks to see if blueAmount textField is
+        empty. If it is, an UIAlert is presented. If not,
+        the transaction and chainState function is called.
+        Then, the blueAmount textField is cleared. All
+        transactions are the printed.
 
  */
 class ViewController: UIViewController {
@@ -136,11 +146,25 @@ class ViewController: UIViewController {
     }
     
     @IBAction func redSend(_ sender: Any) {
-        
+        if redAmount.text == "" {
+            present(invalidAlert, animated: true, completion: nil)
+        } else {
+            transcation(from: "\(firstAccount)", to: "\(secondAccount)", amount: Int(redAmount.text!)!, type: "normal")
+            print("\(redAmount.text!)BTC sent from \(firstAccount) to \(secondAccount)")
+            chainState()
+            redAmount.text = ""
+        }
     }
     
     @IBAction func blueSend(_ sender: Any) {
-        
+        if redAmount.text == "" {
+            present(invalidAlert, animated: true, completion: nil)
+        } else {
+            transcation(from: "\(secondAccount)", to: "\(firstAccount)", amount: Int(blueAmount.text!)!, type: "normal")
+            print("\(blueAmount.text!)BTC sent from \(secondAccount) to \(firstAccount)")
+            chainState()
+            blueAmount.text = ""
+        }
     }
     
 }
