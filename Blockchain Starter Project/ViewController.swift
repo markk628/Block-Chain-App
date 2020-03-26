@@ -9,6 +9,46 @@
 
 import UIKit
 
+/*
+ #ViewController Class
+ 
+ ##ViewController's Data
+    - IBOutlets
+        * blueAmount (UITextField)
+        * redAmount (UITextField)
+        * redLabel (UILabel)
+        * blueLabel (UILable)
+    - Variables/Constants
+        * firstAccount (Hardcoded int)
+        * secondAccount (Hardcoded int)
+        * bitcoinChain (Blockchain)
+        * reward (Hardcoded int)
+        * accounts (An array of accounts. Has the account
+          ID and balance)
+        * invalidAlert (UIAlert)
+ 
+ ##ViewController's Functions
+    - transaction
+        * First if-else checks to see if the sender exists
+          or has enough in their balance to make transaction.
+          If not, displays an UIAlert. Otherwise the money
+          is sent.
+        * Second if-else checks to see if reciever exists.
+          If not, the function does nothing. Otherwise the
+          money is added to the reciever's balance.
+        * Third if-else checks for the type of transaction.
+          If the transaction invloves the Genesis Block, a
+          new Genesis Block is created. Otherwise a new Block
+          is created.
+    - chainState prints Block's number, hash, previous hash,
+      and data. Also updates the UI.
+    - chainValidity checks if the current Block's previous
+      hash matches the previous Block's hash. For loop iterates
+      through bitcoinChain's Blocks and checks if the current
+      Blocks's previous hashes matches the previous Block's
+      hash.
+
+ */
 class ViewController: UIViewController {
     
     @IBOutlet weak var blueAmount: UITextField!
@@ -24,8 +64,6 @@ class ViewController: UIViewController {
     let invalidAlert = UIAlertController(title: "Invalid Transaction", message: "Please check the details of your transaction as we were unable to process this.", preferredStyle: .alert)
     
     func transcation(from: String, to: String, amount: Int, type: String) {
-//        Checks to see if the sender exists or has enough in their balance to make transaction.
-//        if not, displays an UIAlert. Otherwise the money is sent
         if accounts[from] == nil {
             self.present(invalidAlert, animated: true, completion: nil)
             return
@@ -36,23 +74,19 @@ class ViewController: UIViewController {
             accounts.updateValue(accounts[from]! - amount, forKey: from)
         }
         
-//        Checks to see if reciever exists. If not, the function does nothing. Otherwise the money is
-//        added to the reciever's balance
         if accounts[to] == nil {
             accounts.updateValue(amount, forKey: to)
         } else {
             accounts.updateValue(accounts[to]! + amount, forKey: to)
         }
         
-//        Checks for the type of transaction. If the transaction invloves the Genesis Block,
-//        a new Genesis Block is created. Otherwise a new Block is created
         if type == "genesis" {
             bitcoinChain.createGenesisBlock(data: "From: \(from); To: \(to); Amount: \(amount)BTC")
         } else if type == "normal" {
             bitcoinChain.createNewBlock(data: "From: \(from); To: \(to); Amount: \(amount)BTC")
         }
     }
-    
+
     func chainState() {
         for i in 0...bitcoinChain.chain.count-1 {
             print("\tBlock: \(bitcoinChain.chain[i].index!)\n\tHash: \(bitcoinChain.chain[i].hash!)\n\tPreviousHash: \(bitcoinChain.chain[i].previousHash!)\n\tData: \(bitcoinChain.chain[i].data!)")
@@ -61,6 +95,16 @@ class ViewController: UIViewController {
         blueLabel.text = "Balance: \(accounts[String(describing: secondAccount)]!) BTC"
         print(accounts)
         print(chainValidity())
+    }
+
+    func chainValidity() -> String {
+        var isChainValid = true
+        for i in 1...bitcoinChain.chain.count-1 {
+            if bitcoinChain.chain[i].previousHash != bitcoinChain.chain[i-1].hash {
+                isChainValid = false
+            }
+        }
+        return "Chain is valid: \(isChainValid)\n"
     }
     
     override func viewDidLoad() {
