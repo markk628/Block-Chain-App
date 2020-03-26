@@ -47,6 +47,9 @@ import UIKit
       through bitcoinChain's Blocks and checks if the current
       Blocks's previous hashes matches the previous Block's
       hash.
+    - IBActions
+        * redMine adds 100BTC to firstAccount
+        * blueMine adds 100BTC to secondAccount
 
  */
 class ViewController: UIViewController {
@@ -109,7 +112,10 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        transcation(from: "0000", to: "\(firstAccount)", amount: 50, type: "genesis")
+        transcation(from: "\(firstAccount)", to: "\(secondAccount)", amount: 10, type: "normal")
+        chainState()
+        self.invalidAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     }
 
     override func didReceiveMemoryWarning() {
@@ -118,11 +124,15 @@ class ViewController: UIViewController {
     }
 
     @IBAction func redMine(_ sender: Any) {
-        
+        transcation(from: "0000", to: "\(firstAccount)", amount: 100, type: "normal")
+        print("New Block mined by \(firstAccount)")
+        chainState()
     }
     
     @IBAction func blueMine(_ sender: Any) {
-        
+        transcation(from: "0000", to: "\(secondAccount)", amount: 100, type: "normal")
+        print("New Block mined by \(secondAccount)")
+        chainState()
     }
     
     @IBAction func redSend(_ sender: Any) {
