@@ -10,5 +10,23 @@
 import UIKit
 
 class Blockchain {
-    // Enter the logic for the Blockchain here
+    var chain = [Block]()
+    
+    func createGenesisBlock(data: String) {
+        let initialBlock = Block()
+        initialBlock.hash = initialBlock.generateHash()
+        initialBlock.data = data
+        initialBlock.previousHash = "0000"
+        initialBlock.index = 0
+        chain.append(initialBlock)
+    }
+    
+    func createNewBlock(data: String) {
+        let newBlock = Block()
+        newBlock.hash = newBlock.generateHash()
+        newBlock.data = data
+        newBlock.previousHash = chain[chain.count - 1].hash
+        newBlock.index = chain.count
+        chain.append(newBlock)
+    }
 }
