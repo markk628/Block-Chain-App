@@ -157,7 +157,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func blueSend(_ sender: Any) {
-        if redAmount.text == "" {
+        if blueAmount.text == "" {
             present(invalidAlert, animated: true, completion: nil)
         } else {
             transcation(from: "\(secondAccount)", to: "\(firstAccount)", amount: Int(blueAmount.text!)!, type: "normal")
