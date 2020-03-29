@@ -69,8 +69,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var redLabel: UILabel!
     @IBOutlet weak var blueLabel: UILabel!
     
-    let firstAccount = 1065
-    let secondAccount = 0217
+    let firstAccount = 0001
+    let secondAccount = 0002
     let bitcoinChain = Blockchain()
     let reward = 100
     var accounts: [String : Int] = ["0000": 10000000]
